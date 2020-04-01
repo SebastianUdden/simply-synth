@@ -3,6 +3,8 @@ import styled from "styled-components"
 import { MEASURES } from "../constants/measures"
 import Selected from "./Selected"
 import { WAVEFORMS } from "../constants/waveforms"
+import { SYNTHS } from "../constants/synths"
+import Range from "./Range"
 
 const Settings = styled.div`
   display: flex;
@@ -16,8 +18,18 @@ const Row = styled.div`
   padding: 0.5rem;
   border-bottom: 1px solid white;
 `
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 const Input = styled.input`
   cursor: pointer;
+`
+
+const OptionWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 `
 
 export default ({
@@ -27,16 +39,21 @@ export default ({
   onWaveformChange,
   measure,
   onMeasureChange,
+  synthType,
+  onSynthTypeChange,
+  envelope,
+  onEnvelopeChange,
 }) => {
+  const { attack, decay, sustain, release } = envelope
   return (
     <Settings>
       <Row>
         <span>Volume</span>
         <Input
           type="range"
-          min="0.0"
-          max="1.0"
-          step="0.05"
+          min="-75"
+          max="0"
+          step="1"
           value={volume}
           list="volumes"
           name="volume"
@@ -47,17 +64,72 @@ export default ({
           <option value="1.0" label="100%" />
         </datalist>
       </Row>
+      {measure === "envelope" && (
+        <Row>
+          <span>ADSR Envelope</span>
+          <Column>
+            <Range
+              min="0.01"
+              max="2"
+              step="0.01"
+              name="attack"
+              value={attack}
+              onChange={onEnvelopeChange}
+              labels={["Short", "Long"]}
+            />
+            <Range
+              min="0.01"
+              max="2"
+              step="0.01"
+              name="decay"
+              value={decay}
+              onChange={onEnvelopeChange}
+              labels={["Short", "Long"]}
+            />
+            <Range
+              min="0"
+              max="1"
+              step="0.01"
+              name="sustain"
+              value={sustain}
+              onChange={onEnvelopeChange}
+              labels={["Low", "High"]}
+            />
+            <Range
+              min="0.01"
+              max="4"
+              step="0.01"
+              name="release"
+              value={release}
+              onChange={onEnvelopeChange}
+              labels={["Short", "Long"]}
+            />
+          </Column>
+        </Row>
+      )}
       <Row>
-        <span>Current measure </span>
-        <div>
+        <span>Measure</span>
+        <OptionWrapper>
           {MEASURES.map(name => (
             <Selected name={name} current={measure} onClick={onMeasureChange} />
           ))}
-        </div>
+        </OptionWrapper>
       </Row>
       <Row>
-        <span>Current waveform </span>
-        <div>
+        <span>Synth</span>
+        <OptionWrapper>
+          {SYNTHS.map(name => (
+            <Selected
+              name={name}
+              current={synthType}
+              onClick={onSynthTypeChange}
+            />
+          ))}
+        </OptionWrapper>
+      </Row>
+      <Row>
+        <span>Waveform</span>
+        <OptionWrapper>
           {WAVEFORMS.map(name => (
             <Selected
               name={name}
@@ -65,7 +137,7 @@ export default ({
               onClick={onWaveformChange}
             />
           ))}
-        </div>
+        </OptionWrapper>
       </Row>
     </Settings>
   )
