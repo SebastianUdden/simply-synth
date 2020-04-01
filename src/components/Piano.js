@@ -13,8 +13,9 @@ const Piano = styled.div`
 
 export default ({ currentKeys, onNotePressed, onNoteReleased }) => {
   const [isMouseDown, setIsMouseDown] = useState(false)
-  const a4 = document.getElementById("A4")
+  const [a4, setA4] = useState(undefined)
 
+  useEffect(() => setA4(document.getElementById("A4")), [])
   useEffect(() => {
     a4 && a4.scrollIntoView(false)
   }, [a4])

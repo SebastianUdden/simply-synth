@@ -33,7 +33,7 @@ export default () => {
   const [waveform, setWaveform] = useState("sine")
   const [currentKeys, setCurrentKeys] = useState([])
   const [measure, setMeasure] = useState("8n")
-  const [synth, setSynth] = useState(createSynth("sine"))
+  const [synth, setSynth] = useState(undefined)
 
   const onNotePressed = (name, frequency) => {
     synth.triggerAttackRelease(name, measure)
